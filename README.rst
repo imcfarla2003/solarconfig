@@ -6,7 +6,13 @@ SolarConfig
 consider** `becoming a financial member of BeeWare`_.
 
 Change the battery charging parameters of Solarman (IGEN-Tech) v5 based solar inverter data loggers
+Uses `PySolarmanV5`_ from Jonathan McCrohan
+
+Charger icons created by prettycons - `Flaticon`_
 
 .. _`Briefcase`: https://github.com/beeware/briefcase
 .. _`The BeeWare Project`: https://beeware.org/
 .. _`becoming a financial member of BeeWare`: https://beeware.org/contributing/membership
+.. _`PySolarmanV5`: https://github.com/jmccrohan/pysolarmanv5
+.. _`Flaticon`: https://www.flaticon.com/free-icons/charger
+

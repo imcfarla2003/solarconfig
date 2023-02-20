@@ -1,5 +1,5 @@
 """
-My first application
+SolarConfig
 """
 import toga
 from toga.style import Pack
