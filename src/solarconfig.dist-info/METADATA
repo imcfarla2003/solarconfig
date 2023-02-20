@@ -1,0 +1,11 @@
+Metadata-Version: 2.1
+Briefcase-Version: 0.3.12
+Name: solarconfig
+Formal-Name: SolarConfig
+App-ID: me.mcfarlanes.solarconfig.solarconfig
+Version: 0.0.1
+Home-page: https://solarconfig.mcfarlanes.me/solarconfig
+Download-URL: https://solarconfig.mcfarlanes.me/solarconfig
+Author: Iain McFarlane
+Author-email: iain@mcfarlanes.me
+Summary: Change the battery charging parameters of Solarman (IGEN-Tech) v5 based solar inverter data loggers
