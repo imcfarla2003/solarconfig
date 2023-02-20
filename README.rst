@@ -5,7 +5,8 @@ SolarConfig
 `The BeeWare Project`_. **If you want to see more tools like Briefcase, please
 consider** `becoming a financial member of BeeWare`_.
 
-Change the battery charging parameters of Solarman (IGEN-Tech) v5 based solar inverter data loggers
+Change the battery charging parameters of Solarman (IGEN-Tech) v5 based solar inverter data loggers. 
+Specifically known to work with firmware MW_08_512_0501_1.82
 
 Uses `PySolarmanV5`_ from Jonathan McCrohan
 
