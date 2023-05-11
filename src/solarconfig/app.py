@@ -137,6 +137,32 @@ class HelloWorld(toga.App):
         discharging_box.add(self.dischargestart)
         discharging_box.add(self.dischargestop)
 
+        current_label_label = toga.Label(
+            'Charging Current (max 70A default 50A)',
+            style = Pack(padding=5)
+        )
+        self.current_label = toga.TextInput(
+            placeholder='0',
+            style = Pack(padding=5,flex=1),
+            validators = [validators.Integer()]
+        )
+        current_box = toga.Box(style=Pack(direction=ROW, alignment=CENTER))
+        current_box.add(current_label_label)
+        current_box.add(self.current_label)
+        
+        dcurrent_label_label = toga.Label(
+            'Discharging Current (max 70A default 50A)',
+            style = Pack(padding=5)
+        )
+        self.dcurrent_label = toga.TextInput(
+            placeholder='0',
+            style = Pack(padding=5,flex=1),
+            validators = [validators.Integer()]
+        )
+        dcurrent_box = toga.Box(style=Pack(direction=ROW, alignment=CENTER))
+        dcurrent_box.add(dcurrent_label_label)
+        dcurrent_box.add(self.dcurrent_label)
+        
         updatebutton = toga.Button(
             "Update Inverter",
             on_press=self.set_timing,
@@ -154,7 +180,9 @@ class HelloWorld(toga.App):
         parameters_box = toga.Box(style=Pack(direction=COLUMN))
         parameters_box.add(timed_box)
         parameters_box.add(charging_box)
+        parameters_box.add(current_box)
         parameters_box.add(discharging_box)
+        parameters_box.add(dcurrent_box)
         parameters_box.add(psync_box)
         
         main_box.add(device_box)
@@ -279,11 +307,13 @@ class HelloWorld(toga.App):
             try:
                 self.timed = (modbus.read_input_register_formatted(register_addr=33132, quantity=1, bitmask=0x2, bitshift=1)==1)
                 self.chktimed.value = self.timed
-                timing = modbus.read_holding_registers(register_addr=43143, quantity=8)
-                self.chargestart.value = f'{timing[0]:02d}:{timing[1]:02d}:00'
-                self.chargestop.value = f'{timing[2]:02d}:{timing[3]:02d}:00'
-                self.dischargestart.value = f'{timing[4]:02d}:{timing[5]:02d}:00'
-                self.dischargestop.value = f'{timing[6]:02d}:{timing[7]:02d}:00'
+                timing = modbus.read_holding_registers(register_addr=43141, quantity=10)
+                self.current_label.value = timing[0]/10
+                self.dcurrent_label.value = timing[1]/10
+                self.chargestart.value = f'{timing[2]:02d}:{timing[3]:02d}:00'
+                self.chargestop.value = f'{timing[4]:02d}:{timing[5]:02d}:00'
+                self.dischargestart.value = f'{timing[6]:02d}:{timing[7]:02d}:00'
+                self.dischargestop.value = f'{timing[8]:02d}:{timing[9]:02d}:00'
             except V5FrameError:
                 print("Getting charge timings - Failed")
             modbus.sock.close()
@@ -338,11 +368,17 @@ class HelloWorld(toga.App):
             chargestop = self.chargestop.value.strftime('%H:%M').split(":")
             dischargestart = self.dischargestart.value.strftime('%H:%M').split(":")
             dischargestop = self.dischargestop.value.strftime('%H:%M').split(":")
+        if float(self.current_label.value)*10 > 700:
+            self.current_label.value = "70.0"
+        if float(self.dcurrent_label.value)*10 > 700:
+            self.dcurrent_label.value = "70.0"
         if self.ip_address != None and self.serial != None:
             modbus = PySolarmanV5(self.ip_address,self.serial)
             try:
-                modbus.write_multiple_holding_registers(register_addr=43143, 
+                modbus.write_multiple_holding_registers(register_addr=43141, 
                     values=[
+                        int(float(self.current_label.value)*10),
+                        int(float(self.dcurrent_label.value)*10),
                         int(chargestart[0]),
                         int(chargestart[1]),
                         int(chargestop[0]),
